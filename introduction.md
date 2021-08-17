@@ -197,3 +197,134 @@ Proof. simpl. reflexivity. Qed.
 
 ```
 
+
+
+# Types
+
+`Check` command prints the type an expressions computes to 
+
+
+
+```coq
+Check true.
+(*===> true: bool)
+```
+
+
+
+if we follow the check expression with a colon and another expression, coq will compare the types and verify if they're thesame 
+
+```coq
+Check true
+: bool.
+
+```
+
+Note: even functions have a type, they're _function types_ and are represented using arrows
+
+```
+Check negb
+	: bool -> bool.
+```
+
+
+
+
+
+# The `Inductive` definition
+
+Finally we get to address the `Inductive` definition.
+
+If you'll note, the types so far have all been like `enums` or `enumerated types` 
+
+- so they're like a finite set of elements, called _constructors_
+
+
+
+The `Inductive` definition does two things
+
+- we get a set of new _constructors_ eg: red, true, etc.
+- It groups said constructors into a name like `bool` or `color`
+
+
+
+# New types from old
+
+We also note that _constructors can in turn take arguments like here
+
+```coq
+Inductive rgb: Type :=
+	| red
+	| green
+	| blue.
+Inductive color: Type :=
+	| black
+	| white
+	| primary (p: rgb)
+	
+
+```
+
+note the `primary` it takes an argument of type `rgb`
+
+
+
+so when we say `primary red` it is said that the `primary` constructor has been applied to argument `red`
+
+so 
+$$
+\text{red} \in rgb \\
+\text{primary red} \in color
+$$
+
+
+So now we define other functions
+
+
+
+```coq
+Definition monochrome (c: color) : bool := 
+    match c with
+    | black => true
+    | white => true
+    | primary p => false
+    end.
+```
+
+
+
+and now 
+
+```coq
+Compute monochrome black.
+Compute monochrome (primary red).
+```
+
+
+
+both give us true 
+
+also in the second case if we did `Compute monochrome primary red` it would be an error because red is supposed to be an argument to `primary`
+
+
+
+# Modules
+
+Coq provides a _mdule_ system for making large shit 
+
+The syntax ends up looking a lot like python
+
+
+
+```coq
+Module Playground.
+	Definition b: rgb := blue.
+End Playground
+```
+
+Now, that particular `b` will be referred to using `Playground.b` 
+
+
+
+# Tuples
+
