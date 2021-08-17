@@ -73,4 +73,28 @@ Example test_orb5: false || false || true = true.
 Proof. simpl. reflexivity. Qed.
 
 
+Check true
+    : bool.
 
+Check negb
+    : bool -> bool.
+
+Inductive rgb: Type :=
+    | red
+    | blue
+    | green.
+
+Inductive color: Type :=
+    | white
+    | black
+    | primary (p : rgb).
+
+Definition monochrome (c: color) : bool := 
+    match c with
+    | black => true
+    | white => true
+    | primary p => false
+    end.
+
+Compute monochrome black.
+Compute monochrome (primary red).
