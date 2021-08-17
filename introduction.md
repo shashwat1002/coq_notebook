@@ -328,3 +328,47 @@ Now, that particular `b` will be referred to using `Playground.b`
 
 # Tuples
 
+A single constructor with multiple parameters can be used to create a tuple type
+
+Consider a bit string of 3 members
+
+(will also define bool)
+
+
+
+```
+Inductive bit : Type :=
+    | B0
+    | B1.
+
+Inductive three_tuple : Type :=
+    | bits (b0 b1 b2 : bit).
+
+Check (bits B0 B1 B0)
+    : three_tuple.
+
+```
+
+Also I think this is equivalent to 
+
+
+
+```coq
+Inductive bit : Type :=
+    | B0
+    | B1.
+
+Inductive three_tuple : Type :=
+    | bits (b0 : bit) (b1 : bit) (b2 : bit).
+
+Check (bits B0 B1 B0)
+    : three_tuple.
+    
+```
+
+
+
+the latter suntax is what'll allow me to make mixed tuples
+
+
+
