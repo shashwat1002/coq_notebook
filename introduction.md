@@ -372,3 +372,170 @@ the latter suntax is what'll allow me to make mixed tuples
 
 
 
+# Numbers
+
+
+
+we'll endeavour to define natural numbers ourselves.
+
+We want the definition to be such that it makes proofs simpler.
+
+So we kinda define it recursively
+
+```coq
+Inductive nat : Type :=
+	| O
+	| S (n : nat).
+```
+
+
+
+So what does this look like with context to numbers we know and love?
+
+- 1 is represented by S O
+- 2 is represented by S (S O)
+- 3 is represented by s ( S ( S O))
+
+think of S as "successor" so S of something means _successor of something_
+
+
+
+We need to understand that _O and S are symbols in the sand_ (Thank you, professor Aftab Hussein). We have just defined a representation 
+
+
+
+## Functions on this definition
+
+```coq
+Definition pred (n : nat) : nat :=
+	match n with
+		| O => O
+		| S n' => n'
+	end.
+
+```
+
+the second branch is basicallt saying that if you have S (..) then return the stuff in the parenthesis
+
+Note it's not `0`, it's `O` just a representation 
+
+
+
+
+
+Because Natural numbers are so uniquitous, coq provides a definition for them and a nice way of printing them 
+
+
+
+consider this
+
+```coq
+Check (S (S (S O))).
+```
+
+
+
+the output of `coq` will mention `nat` and `3` 
+
+consider an arbitrary function
+
+```coq
+Definition minustwo (n : nat) : nat := 
+    match n with
+    | O => O
+    | S O => O
+    | S (S n') => n'
+    end.
+```
+
+
+
+note that 
+
+`Check S` will yield `nat -> nat`
+
+and so will `Check minustwo` and `Check pred`
+
+but there is a fundamental difference between them and S
+
+both `minustwo` and `pred` are computationally defined, that is `pred (S O)` can be _simplified_ to `O` . No such behavior can be associated to simplification of `S` and an argument
+
+
+
+# Recursive function
+
+```coq
+Fixpoint iseven (n : nat) : bool :=
+    match n with
+    | O => true
+    | S O => false
+    | S ( S n') => iseven (n')
+    end.
+```
+
+
+
+This is basically using a recursive function based on the claim that `n` is an even number if and only if `n-2` is also even with the base cases of `1` ans `0`
+
+
+
+
+
+
+
+You use the `Fixpoint` keyword instead of `Definition`
+
+You can use this definition to define other functions, like say for instance we wanna detect odd numbers, we can define such a function as a negation. 
+
+
+
+```coq
+Definition isodd (n : nat) : bool :=
+    match n with
+    | n => negb(iseven n) 
+    end.
+```
+
+
+
+
+
+
+
+
+
+Now consider the examples
+
+```coq
+Example check_is_even : (iseven 16) = true.
+Proof. simpl. reflexivity. Qed.
+
+Example check_is_odd : (isodd 17) = true.
+Proof. simpl. reflexivity. Qed.
+```
+
+pass
+
+but
+
+```coq
+Example check_is_od : (iseven 17) = true.
+Proof. simpl. reflexivity. Qed.
+```
+
+
+
+fails
+
+## `plus`
+
+We define plus again
+
+```coq
+Fixpoint plus (n m : nat) : nat :=
+    match n with
+    | O => m
+    | S n' => (plus n' m)
+    end.
+```
+
