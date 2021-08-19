@@ -539,3 +539,40 @@ Fixpoint plus (n m : nat) : nat :=
     end.
 ```
 
+
+
+## `eqb`
+
+```coq
+Fixpoint eqb (n m : nat) : bool :=
+	match n with 
+		| O => match m with
+				| 0 => true
+				| s m' => false
+				end
+		| S n' => match m with
+					| 0 => false
+					| S m' => eqb n' m'
+					end
+	end.
+
+```
+
+
+
+lol, the complexity is `O(min(m, n))`
+
+## `leb`
+
+```coq
+Fixpoint leb (a b: nat ) : bool :=
+    match a with
+    | O => true
+    | S a' => match b with
+                | O => false
+                | S b' => leb a' b'
+                end
+    end.
+
+```
+
